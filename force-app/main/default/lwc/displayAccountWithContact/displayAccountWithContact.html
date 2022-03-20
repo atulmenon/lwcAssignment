@@ -1,0 +1,82 @@
+<template>
+    <div class="slds-scrollable" style="height: 60%;max-height: 60%; overflow: scroll;" onscroll={handleScroll}>
+        <lightning-card>
+            <label>Search Account/Contact</label>
+            <lightning-input onchange={handleChange} value={searchval}></lightning-input>
+            <div class="slds-accordion">
+                <template for:each={accountList} for:item="acc" for:index="index">
+                    <div class="slds-accordion__list-item" key={acc.Id}>
+                        <section class="slds-accordion__section">
+                            <div class="slds-accordion__summary" onclick={toggleSection}>
+                                <h2 class="slds-accordion__summary-heading">
+                                    <button aria-controls="expando-unique-id" aria-expanded="true"
+                                        class="slds-button slds-section__title-action slds-section-title">
+                                        <lightning-icon class="slds-section__title-action-icon slds-button__icon_left"
+                                            aria-controls={acc.Id} aria-expanded="true" title={acc.Name}
+                                            icon-name="utility:switch" size="x-small"></lightning-icon>
+                                        <span class="slds-accordion__summary-content">
+                                            <div class="slds-grid slds-wrap">
+                                                <div class="slds-col slds-size_1-of-2">
+                                                    <p class="slds-truncate">Name: {acc.Name}</p></br>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-2">
+                                                    <p class="slds-truncate">Type: {acc.Type}</p></br>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-2">
+                                                    <p class="slds-truncate">Rating: {acc.Rating}</p></br>
+                                                </div>
+                                                <div class="slds-col slds-size_1-of-2">
+                                                    <p class="slds-truncate">Phone: {acc.Phone}</p></br>
+                                                </div>
+                                            </div>
+                                        </span>
+                                    </button>
+                                </h2>
+                            </div>
+                            <template if:true={acc.Contacts}>
+                                <div class="slds-accordion__content">
+                                <template for:each={acc.Contacts} for:item="cont" for:index="ind">
+                                    <div data-id={ind} data-index={index} key={cont.Id}
+                                        onmouseover={displayPopOver} onmouseleave={closePopOver}>
+                                        {cont.Name}
+                                        <template if:true={cont.show}>
+                                            <section aria-describedby="dialog-body-id-112" aria-label="Dialog Title"
+                                                class="slds-popover slds-nubbin_left" role="dialog"
+                                                style="position: absolute;">
+
+                                                <div class="slds-popover__body">
+                                                    <div class="slds-media">
+                                                        <div class="slds-media__body">
+                                                            <div class="slds-grid slds-wrap">
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p>Name: {cont.Name}</p></br>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p>Title: {cont.Title}</p></br>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p>Email: {cont.Email}</p></br>
+                                                                </div>
+                                                                <div class="slds-col slds-size_1-of-2">
+                                                                    <p>Phone: {cont.Phone}</p></br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </section>
+                                        </template>
+                                    </div>
+                                </template>
+                                <c-create-contact account-id={acc.Id} acnt-name={acc.Name} onselected={handleRefresh}></c-create-contact>
+                                </div>
+                            </template>
+
+                        </section>
+                    </div>
+                </template>
+            </div>
+
+        </lightning-card>
+    </div>
+</template>
